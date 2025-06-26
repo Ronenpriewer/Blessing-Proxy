@@ -1,4 +1,3 @@
 MAPBOX_TOKEN=pk.eyJ1Ijoicm9uZW5wcmlld2VyIiwiYSI6ImNtYnkwNHF2dDE4am0ybHF1b3k4YWJxdjcifQ.VYDM0dc2DleY6czcV9PCqQ
-GOOGLE_SCRIPT_URL=https://script.google.com/macros/s/AKfycbzkTV8CHOXLeiVc4YBjSX37dGTrmm01rv-OYuDqrmApfAWv-e3E8eHp3klO_ZBtEDEYmw/exec
+APP_SCRIPT_URL=https://script.google.com/macros/s/AKfycbyh6Cqzjl74N3_bqHtQqQ2K6J4YeXC5G5sCXa0ok8U7VL30af99j7WJoZq41tzi61H1/exec
 DOMAIN=https://milliondiamondsjerusalem.com
-
