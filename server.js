@@ -5,31 +5,43 @@ require('dotenv').config();
 
 const app = express();
 app.use(cors());
-app.use(express.json());
+app.use(express.json()); // for application/json
+app.use(express.urlencoded({ extended: true })); // for form submissions
 
 app.post('/', async (req, res) => {
-  const { url } = req.query;
+  const targetUrl = req.query.url;
 
-  if (!url) {
-    return res.status(400).json({ status: 'error', message: 'Missing URL query parameter' });
+  if (!targetUrl) {
+    return res.status(400).json({ error: 'Missing target URL.' });
   }
 
   try {
-    const response = await fetch(url, {
+    const response = await fetch(targetUrl, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(req.body)
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams(req.body).toString()
     });
 
-    const result = await response.json();
-    res.json(result);
+    const contentType = response.headers.get('content-type');
+
+    // Handle both JSON and HTML responses
+    if (contentType && contentType.includes('application/json')) {
+      const data = await response.json();
+      return res.status(200).json(data);
+    } else {
+      const text = await response.text();
+      return res.status(200).json({ success: true, message: "Non-JSON response relayed.", raw: text });
+    }
+
   } catch (error) {
-    console.error('❌ Proxy error:', error);
-    res.status(500).json({ status: 'error', message: 'Proxy failed', error: error.message });
+    console.error('Error forwarding request:', error);
+    res.status(500).json({ error: 'Proxy failed to forward request.' });
   }
 });
 
-const PORT = process.env.PORT || 10000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`🚀 Proxy server running on port ${PORT}`);
+  console.log(`Proxy server running on port ${PORT}`);
 });
